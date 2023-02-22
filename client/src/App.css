@@ -1,0 +1,89 @@
+.App {  
+  background-color: #282c34;
+  min-height: 100vh;
+  padding-left: 5em;
+  padding-right: 5em;
+  color: white;
+}
+
+.App-header{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.App-header h1 {
+  font-size: calc(10px + 7vmin);
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* FieldPlaceholder will align all the div elements to the center */
+.FieldPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.FieldPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.UserInputFields {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  margin-top: 50px;
+}
+
+.UserInputFields > * {
+  margin-right: 10px;
+}
+
+.SubmitButton {
+  margin-bottom: 40px;
+}
+
+.OutputFields {
+  display: flex;
+  flex-direction: row;
+  align-items: center;  
+  justify-content: center;
+  width: 100%;
+}
+
+.OutputFields > * {
+  margin-bottom: 5em;
+  margin-right: 250px;
+  width: auto;
+}
+
+.footer {
+  bottom: 0;
+  width: 100%;
+  height: 2.5em;
+  background-color: #282c34;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}

@@ -8,6 +8,7 @@ import CurieOutput from "./ouput components/CurieOutput";
 import AdaOutput from "./ouput components/AdaOutput";
 import BabbageOuput from "./ouput components/BabbageOutput";
 import { useState } from "react";
+import { lightTheme } from "./misc/ThemeModifiers";
 
 function MainFrame(){
 

@@ -65,15 +65,28 @@ ul {
 .OutputFields {
   display: flex;
   flex-direction: row;
-  align-items: center;  
-  justify-content: center;
+  align-items: center;
   width: 100%;
 }
 
 .OutputFields > * {
   margin-bottom: 5em;
-  margin-right: 250px;
-  width: auto;
+}
+
+/*Add a space between each .OuputField divs besides the last one*/
+.OutputFields > *:not(:last-child) {
+  margin-right: 10px;
+}
+
+/*On medium screens, the .OutputFields divs will be stacked on top of each other*/
+@media (max-width: 950px) {
+  .OutputFields {
+    flex-direction: column;
+    width: auto;
+  }
+  .OutputFields > *:not(:last-child) {
+    margin-bottom: 2em;
+  }
 }
 
 .footer {

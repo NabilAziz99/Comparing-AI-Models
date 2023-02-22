@@ -7,6 +7,13 @@ const lightTheme = createTheme({
         // When we change it to dark mode, the text will be white
         mode: 'dark'
     }
-  });
+});
+
+export const darkTheme = createTheme({
+  palette: {
+      // When we change it to dark mode, the text will be white
+      mode: 'light'
+  }
+});
 
 export default lightTheme;

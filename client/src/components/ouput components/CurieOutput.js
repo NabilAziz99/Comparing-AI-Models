@@ -5,7 +5,6 @@ import lightTheme from "../misc/ThemeModifiers";
 
 function CurieOutput(props) {
     return (
-        <div>
             <ThemeProvider theme={lightTheme}>
                 <TextField
                     style={{width: "200%"}}
@@ -26,7 +25,6 @@ function CurieOutput(props) {
                     }}
                 />
             </ThemeProvider>
-        </div>
     );
 }
 

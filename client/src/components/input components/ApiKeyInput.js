@@ -9,6 +9,7 @@ function ApiKeyInput(props) {
         <ThemeProvider theme={lightTheme}>
             <TextField
                 required
+                id="apiKeyInput"
                 type="text" 
                 placeholder="Api Key" 
                 label="Api Key" 

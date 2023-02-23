@@ -9,6 +9,7 @@ function UserInput (props){
             <ThemeProvider theme={lightTheme}>
                 <TextField 
                     required
+                    id="userInput"
                     type="text" 
                     placeholder="Prompt" 
                     label="Input" 

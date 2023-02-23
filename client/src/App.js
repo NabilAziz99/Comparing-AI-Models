@@ -15,33 +15,35 @@ function App() {
       </div>
 
       <div>
-        <h1>About Each Model</h1>
-        <ul>
-          <li>
-            <h2>Davinci</h2>
-            <p>
-              ... Info here
-            </p>
-          </li>
-          <li>
-            <h2>Curie</h2>
-            <p>
-              ... Info here
-            </p>
-          </li>
-          <li>
-            <h2>Ada</h2>
-            <p>
-              ... Info here
-            </p>
-          </li>
-          <li>
-            <h2>Babbage</h2>
-            <p>
-              ... Info here
-            </p>
-          </li>
-        </ul>
+        <div className='AboutSection'>
+          <h1>About Each Model</h1>
+          <ul>
+            <li>
+              <h2>Davinci</h2>
+              <p>
+                ... Info here
+              </p>
+            </li>
+            <li>
+              <h2>Curie</h2>
+              <p>
+                ... Info here
+              </p>
+            </li>
+            <li>
+              <h2>Ada</h2>
+              <p>
+                ... Info here
+              </p>
+            </li>
+            <li>
+              <h2>Babbage</h2>
+              <p>
+                ... Info here
+              </p>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div className='footer'>

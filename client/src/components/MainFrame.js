@@ -12,14 +12,17 @@ import { lightTheme } from "./misc/ThemeModifiers";
 
 function MainFrame(){
 
+    //Remember to remove this later... set useStates to empty strings
+    const sampleText = "... Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip mex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cpidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+
     const [disabledSubmitButton, setDisabledSubmitButton] = useState(true);
     const [apiKeyText, setApiKeyText] = useState("");
     const [userInputText, setUserInputText] = useState("");
     //make states for Dacvini, Curie, Ada, and Babbage outputs
-    const [davinciOutput, setDavinciOutput] = useState("");
-    const [curieOutput, setCurieOutput] = useState("");
-    const [adaOutput, setAdaOutput] = useState("");
-    const [babbageOutput, setBabbageOutput] = useState("");
+    const [davinciOutput, setDavinciOutput] = useState(sampleText);
+    const [curieOutput, setCurieOutput] = useState(sampleText);
+    const [adaOutput, setAdaOutput] = useState(sampleText);
+    const [babbageOutput, setBabbageOutput] = useState(sampleText);
 
     const setDisabledSubmitButtonState  = (value) => setDisabledSubmitButton(value);
     const handleInputTextChange         = (event) => setUserInputText(event.target.value);

@@ -80,8 +80,15 @@ ul {
 
 /*On medium screens, the .OutputFields divs will be stacked on top of each other*/
 @media (max-width: 950px) {
+  .App {  
+    background-color: #282c34;
+    min-height: 100vh;
+    padding-left: 5vmin;
+    padding-right: 5vmin;
+    color: white;
+  }
   .App-header h1 {
-    font-size: 6vmin
+    font-size: 5.5vmin
   }
   h1 {
     font-size: 7vmin;
@@ -93,16 +100,35 @@ ul {
   }
   .OutputFields > *:not(:last-child) {
     margin-bottom: 2em;
+    margin-right: 0;
+  }
+
+  .AboutSection h1 {
+    text-align: center;
+  }
+  
+  ul li {
+    list-style: none;
+    background-color: #282c34;
+    padding: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    box-shadow: 0 0 10px 0 rgba(242, 239, 239, 0.2);
+    border-radius: 10px;
+  }
+  
+  ul li h2 {
+    text-align: center;
   }
 }
 
 .footer {
-  bottom: 0;
-  width: 100%;
+  width: 100%; 
   background-color: #282c34;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   color: white;
+  flex-shrink: 0;
 }

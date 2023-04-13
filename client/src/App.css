@@ -1,12 +1,12 @@
-.App {  
+.App {
   background-color: #282c34;
   min-height: 100vh;
   padding-left: 5em;
   padding-right: 5em;
-  color: white;
+  color: rgb(252, 118, 118);
 }
 
-.App-header{
+.App-header {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -54,7 +54,7 @@ ul {
   margin-top: 50px;
 }
 
-.UserInputFields > * {
+.UserInputFields>* {
   margin-right: 10px;
 }
 
@@ -69,36 +69,40 @@ ul {
   width: 100%;
 }
 
-.OutputFields > * {
+.OutputFields>* {
   margin-bottom: 5em;
 }
 
 /*Add a space between each .OuputField divs besides the last one*/
-.OutputFields > *:not(:last-child) {
+.OutputFields>*:not(:last-child) {
   margin-right: 10px;
 }
 
 /*On medium screens, the .OutputFields divs will be stacked on top of each other*/
 @media (max-width: 950px) {
-  .App {  
+  .App {
     background-color: #282c34;
     min-height: 100vh;
     padding-left: 5vmin;
     padding-right: 5vmin;
     color: white;
   }
+
   .App-header h1 {
     font-size: 5.5vmin
   }
+
   h1 {
     font-size: 7vmin;
     margin-bottom: 0;
   }
+
   .OutputFields {
     flex-direction: column;
     width: auto;
   }
-  .OutputFields > *:not(:last-child) {
+
+  .OutputFields>*:not(:last-child) {
     margin-bottom: 2em;
     margin-right: 0;
   }
@@ -106,7 +110,7 @@ ul {
   .AboutSection h1 {
     text-align: center;
   }
-  
+
   ul li {
     list-style: none;
     background-color: #282c34;
@@ -116,14 +120,14 @@ ul {
     box-shadow: 0 0 10px 0 rgba(242, 239, 239, 0.2);
     border-radius: 10px;
   }
-  
+
   ul li h2 {
     text-align: center;
   }
 }
 
 .footer {
-  width: 100%; 
+  width: 100%;
   background-color: #282c34;
   display: flex;
   flex-direction: row;

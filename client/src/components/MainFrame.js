@@ -10,21 +10,25 @@ import BabbageOuput from "./ouput components/BabbageOutput";
 import { useState, useEffect } from "react";
 import { lightTheme } from "./misc/ThemeModifiers";
 
-function MainFrame() {
 
-    //Remember to remove this later... set useStates to empty strings
-    const sampleText = "... Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip mex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cpidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+function MainFrame() {
+    // Changed sampleText to empty strings
+    const sampleText = "";
 
     const [disabledSubmitButton, setDisabledSubmitButton] = useState(true);
     const [apiKeyText, setApiKeyText] = useState("");
     const [userInputText, setUserInputText] = useState("");
-    //make states for Dacvini, Curie, Ada, and Babbage outputs
+
+    // Updated initial state values for outputs
     const [davinciOutput, setDavinciOutput] = useState(sampleText);
     const [curieOutput, setCurieOutput] = useState(sampleText);
     const [adaOutput, setAdaOutput] = useState(sampleText);
     const [babbageOutput, setBabbageOutput] = useState(sampleText);
+    // Added a new state for loading
+    const [loading, setLoading] = useState(false);
 
-    const setDisabledSubmitButtonState = (value) => setDisabledSubmitButton(value);
+    const setDisabledSubmitButtonState = (value) =>
+        setDisabledSubmitButton(value);
     const handleInputTextChange = (event) => setUserInputText(event.target.value);
     const handleApiKeyTextChange = (event) => setApiKeyText(event.target.value);
 
@@ -34,39 +38,66 @@ function MainFrame() {
         } else {
             setDisabledSubmitButtonState(true);
         }
-    }, [apiKeyText, userInputText])
+    }, [apiKeyText, userInputText]);
 
-    const onButtonSubmit = () => {
-        //send the api key and the user input to the API
-        console.log("Button was clicked");
-        console.log("API Key: " + apiKeyText);
-        console.log("User Input: " + userInputText);
+    // Added a sample callApiFunction
+    const callApiFunction = async (apiKey, userInput, modelName) => {
+        // Replace this with your actual API call and response handling
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(`${modelName} Output`), 1000);
+        });
+    };
 
-        //get the response from the API and set the states for the outputs
-        //make validation to see if they have a valid API key and if not, display an error message... the api error message will be a code 500 or 400.
-        setDavinciOutput("Davinci Output");
-        setCurieOutput("Curie Output");
-        setAdaOutput("Ada Output");
-        setBabbageOutput("Babbage Output");
-    }
+    const onButtonSubmit = async () => {
+        // Set loading to true
+        setLoading(true);
+
+        try {
+            // Call the API functions for each AI model and store the results in variables
+            const davinciResult = await callApiFunction(apiKeyText, userInputText, "Davinci");
+            const curieResult = await callApiFunction(apiKeyText, userInputText, "Curie");
+            const adaResult = await callApiFunction(apiKeyText, userInputText, "Ada");
+            const babbageResult = await callApiFunction(apiKeyText, userInputText, "Babbage");
+
+            // Update the output states with the results
+            setDavinciOutput(davinciResult);
+            setCurieOutput(curieResult);
+            setAdaOutput(adaResult);
+            setBabbageOutput(babbageResult);
+        } catch (error) {
+            // Handle errors, e.g., display an error message
+        } finally {
+            // Set loading to false
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="FieldPlaceholder">
             <div className="UserInputFields">
-                <ApiKeyInput theme={lightTheme} changed={handleApiKeyTextChange} />
-                <UserInput theme={lightTheme} changed={handleInputTextChange} />
+                <ApiKeyInput changed={handleApiKeyTextChange} />
+                <UserInput changed={handleInputTextChange} />
             </div>
             <div className="SubmitButton">
-                <Button variant="contained" disabled={disabledSubmitButton} onClick={onButtonSubmit}>Let AI Take Over!</Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={onButtonSubmit}
+                    disabled={disabledSubmitButton || loading}
+                >
+                    {loading ? "Loading..." : "Submit"}
+                </Button>
             </div>
             <div className="OutputFields">
-                <DavinciOuput theme={lightTheme} AiTextOutput={davinciOutput} />
-                <CurieOutput theme={lightTheme} AiTextOutput={curieOutput} />
-                <AdaOutput theme={lightTheme} AiTextOutput={adaOutput} />
-                <BabbageOuput theme={lightTheme} AiTextOutput={babbageOutput} />
+
+                <AdaOutput outputText={adaOutput} />
+                <DavinciOuput outputText={davinciOutput} />
+                <CurieOutput outputText={curieOutput} />
+                <BabbageOuput outputText={babbageOutput} />
             </div>
+
         </div>
-    )
+    );
 }
 
 export default MainFrame;

@@ -3,18 +3,18 @@ import TextField from '@mui/material/TextField';
 import { ThemeProvider } from '@mui/material/styles';
 import lightTheme from '../misc/ThemeModifiers';
 
-function UserInput (props){
+function UserInput(props) {
     return (
         <div>
             <ThemeProvider theme={lightTheme}>
-                <TextField 
+                <TextField
                     required
                     id="userInput"
-                    type="text" 
-                    placeholder="Prompt" 
-                    label="Input" 
-                    onChange={props.changed} 
-                    value={props.currentTextInput} 
+                    type="text"
+                    placeholder="Prompt"
+                    label="Input"
+                    onChange={props.changed}
+                    value={props.currentTextInput}
                     multiline
                     maxRows={15}
                 />

@@ -2,80 +2,98 @@ import React from "react";
 import UserInput from "./input components/UserInput";
 import Button from "@mui/material/Button";
 import DavinciOuput from "./ouput components/DavinciOuput";
-import '../App.css'
+import '../App.css';
 import ApiKeyInput from "./input components/ApiKeyInput";
 import CurieOutput from "./ouput components/CurieOutput";
 import AdaOutput from "./ouput components/AdaOutput";
-import BabbageOuput from "./ouput components/BabbageOutput";
+import BabbageOutput from "./ouput components/BabbageOutput";
 import { useState, useEffect } from "react";
 import { lightTheme } from "./misc/ThemeModifiers";
-
+import axios from "axios";
 
 function MainFrame() {
-    // Changed sampleText to empty strings
     const sampleText = "";
 
-    const [disabledSubmitButton, setDisabledSubmitButton] = useState(true);
-    const [apiKeyText, setApiKeyText] = useState("");
     const [userInputText, setUserInputText] = useState("");
-
-    // Updated initial state values for outputs
     const [davinciOutput, setDavinciOutput] = useState(sampleText);
     const [curieOutput, setCurieOutput] = useState(sampleText);
     const [adaOutput, setAdaOutput] = useState(sampleText);
     const [babbageOutput, setBabbageOutput] = useState(sampleText);
-    // Added a new state for loading
     const [loading, setLoading] = useState(false);
+    const [disabledSubmitButton, setDisabledSubmitButton] = useState(true);
+    const [apiKey, setApiKey] = useState(""); // State to manage the API key
 
-    const setDisabledSubmitButtonState = (value) =>
-        setDisabledSubmitButton(value);
+    const setDisabledSubmitButtonState = (value) => setDisabledSubmitButton(value);
     const handleInputTextChange = (event) => setUserInputText(event.target.value);
-    const handleApiKeyTextChange = (event) => setApiKeyText(event.target.value);
+    const handleApiKeyChange = (event) => setApiKey(event.target.value); // Callback function to handle changes to the API key input field
 
     useEffect(() => {
-        if (apiKeyText.length > 0 && userInputText.length > 0) {
+        if (userInputText.length > 0) {
             setDisabledSubmitButtonState(false);
         } else {
             setDisabledSubmitButtonState(true);
         }
-    }, [apiKeyText, userInputText]);
+    }, [userInputText]);
 
-    // Added a sample callApiFunction
-    const callApiFunction = async (apiKey, userInput, modelName) => {
-        // Replace this with your actual API call and response handling
-        return new Promise((resolve) => {
-            setTimeout(() => resolve(`${modelName} Output`), 1000);
-        });
+    const callApiFunction = async (userInput, modelName, apiKey) => {
+        try {
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            };
+
+            const prompt = `You are an AI assistant, and you were asked the following question: ${userInput}. Please provide a well-researched, detailed, and helpful response.`;
+            console.log("Prompt:", prompt); // Log the prompt
+
+            const response = await axios.post(
+                `https://api.openai.com/v1/engines/${modelName}/completions`,
+                {
+                    prompt: prompt,
+                    max_tokens: 150, // Increase the max_tokens value
+                    n: 1,
+                    // stop: "\n", // Comment out the stop parameter
+                    temperature: 1,
+                },
+                { headers: headers }
+            );
+
+            const generatedText = response.data.choices[0].text.trim();
+            console.log("API Response:", response.data); // Log the entire response
+            console.log("Generated Text:", generatedText); // Log the extracted text
+            return generatedText;
+        } catch (error) {
+            console.error("Error in callApiFunction:", error);
+        }
     };
 
     const onButtonSubmit = async () => {
-        // Set loading to true
+        console.log("Submitting...");
+        console.log("API Key:", apiKey); // Log the value of the API key
         setLoading(true);
 
         try {
-            // Call the API functions for each AI model and store the results in variables
-            const davinciResult = await callApiFunction(apiKeyText, userInputText, "Davinci");
-            const curieResult = await callApiFunction(apiKeyText, userInputText, "Curie");
-            const adaResult = await callApiFunction(apiKeyText, userInputText, "Ada");
-            const babbageResult = await callApiFunction(apiKeyText, userInputText, "Babbage");
+            const davinciResult = await callApiFunction(userInputText, "davinci", apiKey);
+            const curieResult = await callApiFunction(userInputText, "curie", apiKey);
+            const adaResult = await callApiFunction(userInputText, "ada", apiKey);
+            const babbageResult = await callApiFunction(userInputText, "babbage", apiKey);
 
-            // Update the output states with the results
             setDavinciOutput(davinciResult);
             setCurieOutput(curieResult);
             setAdaOutput(adaResult);
             setBabbageOutput(babbageResult);
         } catch (error) {
-            // Handle errors, e.g., display an error message
+            console.error(error);
         } finally {
-            // Set loading to false
             setLoading(false);
         }
     };
 
+
     return (
         <div className="FieldPlaceholder">
             <div className="UserInputFields">
-                <ApiKeyInput changed={handleApiKeyTextChange} />
+                <ApiKeyInput apiKey={apiKey} changed={handleApiKeyChange} />
+
                 <UserInput changed={handleInputTextChange} />
             </div>
             <div className="SubmitButton">
@@ -83,19 +101,17 @@ function MainFrame() {
                     variant="contained"
                     color="primary"
                     onClick={onButtonSubmit}
-                    disabled={disabledSubmitButton || loading}
+                    disabled={loading || disabledSubmitButton} // Disable the button if loading or if the input is empty
                 >
                     {loading ? "Loading..." : "Submit"}
                 </Button>
             </div>
             <div className="OutputFields">
-
                 <AdaOutput outputText={adaOutput} />
                 <DavinciOuput outputText={davinciOutput} />
                 <CurieOutput outputText={curieOutput} />
-                <BabbageOuput outputText={babbageOutput} />
+                <BabbageOutput outputText={babbageOutput} />
             </div>
-
         </div>
     );
 }

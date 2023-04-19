@@ -4,7 +4,7 @@
   min-height: 100vh;
   padding-left: 5em;
   padding-right: 5em;
-  color: rgb(252, 118, 118);
+  color: white;
 }
 
 .App-header {
@@ -90,6 +90,7 @@ ul {
 
 .OutputFields {
   display: flex;
+  color: white;
   flex-direction: row;
   align-items: center;
   width: 100%;

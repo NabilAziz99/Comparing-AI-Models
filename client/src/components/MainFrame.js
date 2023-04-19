@@ -8,15 +8,15 @@ import CurieOutput from "./ouput components/CurieOutput";
 import AdaOutput from "./ouput components/AdaOutput";
 import BabbageOutput from "./ouput components/BabbageOutput";
 import { useState, useEffect } from "react";
-import { lightTheme } from "./misc/ThemeModifiers";
 import axios from "axios";
 import stringSimilarity from "string-similarity";
 
-function MainFrame(){
+function MainFrame() {
 
     //Remember to remove this later... set useStates to empty strings
     const sampleText = ""
 
+    const [apiKey, setApiKey] = useState(""); // State variable to store the API key
     const [userInputText, setUserInputText] = useState("");
     const [loading, setLoading] = useState(false);
     const [loaded, setLoaded] = useState(false);
@@ -24,6 +24,7 @@ function MainFrame(){
     const [curieOutput, setCurieOutput] = useState(sampleText);
     const [adaOutput, setAdaOutput] = useState(sampleText);
     const [babbageOutput, setBabbageOutput] = useState(sampleText);
+    const [disabledSubmitButton, setDisabledSubmitButton] = useState(true);
     //Used for the similarity scores
     const [davinciSimilarity, setDavinciSimilarity] = useState(sampleText);
     const [curieSimilarity, setCurieSimilarity] = useState(sampleText);
@@ -41,42 +42,6 @@ function MainFrame(){
             setDisabledSubmitButtonState(true);
         }
     }, [userInputText]);
-
-    const callApiFunction = async (userInput, modelName, apiKey) => {
-        try {
-            const headers = {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            };
-
-            const prompt = `You are an AI assistant, and you were asked the following question: ${userInput}. Please provide a well-researched, detailed, and helpful response.`;
-            console.log("Prompt:", prompt); // Log the prompt
-
-            const response = await axios.post(
-                `https://api.openai.com/v1/engines/${modelName}/completions`,
-                {
-                    prompt: prompt,
-                    max_tokens: 150, // Increase the max_tokens value
-                    n: 1,
-                    // stop: "\n", // Comment out the stop parameter
-                    temperature: 1,
-                },
-                { headers: headers }
-            );
-
-            const generatedText = response.data.choices[0].text.trim();
-            console.log("API Response:", response.data); // Log the entire response
-            console.log("Generated Text:", generatedText); // Log the extracted text
-            return generatedText;
-        } catch (error) {
-            console.error("Error in callApiFunction:", error);
-        }
-    };
-
-    const onButtonSubmit = async () => {
-        console.log("Submitting...");
-        console.log("API Key:", apiKey); // Log the value of the API key
-        setLoading(true);
 
     const callApiFunction = async (userInput, modelName, apiKey) => {
         try {
@@ -147,24 +112,24 @@ function MainFrame(){
     
     const onButtonSubmit = async () => {
         console.log("Submitting...");
-        console.log("API Key:", apiKeyText); // Log the value of the API key
+        console.log("API Key:", apiKey); // Log the value of the API key
         setLoading(true);
 
         //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
         try {
-            const davinciResult = await callApiFunction(userInputText, "text-davinci-002", apiKeyText);
-            const curieResult = await callApiFunction(userInputText, "text-curie-001", apiKeyText);
-            const adaResult = await callApiFunction(userInputText, "text-ada-001", apiKeyText);
-            const babbageResult = await callApiFunction(userInputText, "text-babbage-001", apiKeyText);
+            const davinciResult = await callApiFunction(userInputText, "text-davinci-002", apiKey);
+            const curieResult = await callApiFunction(userInputText, "text-curie-001", apiKey);
+            const adaResult = await callApiFunction(userInputText, "text-ada-001", apiKey);
+            const babbageResult = await callApiFunction(userInputText, "text-babbage-001", apiKey);
         
             setDavinciOutput(davinciResult);
             setCurieOutput(curieResult);
             setAdaOutput(adaResult);
             setBabbageOutput(babbageResult);
 
-            const davinciSimilarityResult = await callSimilarityFunction("Davinci", "Curie", davinciResult, curieResult, apiKeyText);
-            const curieSimilarityResult = await callSimilarityFunction("Curie", "Ada", curieResult, adaResult, apiKeyText);
-            const adaSimilarityResult = await callSimilarityFunction("Ada", "Babbage", adaResult, babbageResult, apiKeyText);
+            const davinciSimilarityResult = await callSimilarityFunction("Davinci", "Curie", davinciResult, curieResult, apiKey);
+            const curieSimilarityResult = await callSimilarityFunction("Curie", "Ada", curieResult, adaResult, apiKey);
+            const adaSimilarityResult = await callSimilarityFunction("Ada", "Babbage", adaResult, babbageResult, apiKey);
             //const babbageSimilarityResult = await callSimilarityFunction(babbageResult, davinciResult, apiKeyText);
 
             setDavinciSimilarity(davinciSimilarityResult);
@@ -191,10 +156,10 @@ function MainFrame(){
                 <Button variant="contained" disabled={disabledSubmitButton || loading} onClick={onButtonSubmit}> {loading ? "Loading..." : "Submit"}</Button>
             </div>
             <div className="OutputFields">
-                <AdaOutput outputText={adaOutput} />
-                <DavinciOuput outputText={davinciOutput} />
-                <CurieOutput outputText={curieOutput} />
-                <BabbageOutput outputText={babbageOutput} />
+                <DavinciOuput AiTextOutput={davinciOutput} />
+                <AdaOutput AiTextOutput={adaOutput} />
+                <CurieOutput AiTextOutput={curieOutput} />
+                <BabbageOutput AiTextOutput={babbageOutput} />
             </div>
             {loaded && (
               <div>
@@ -228,7 +193,6 @@ function MainFrame(){
               </div>
             )}
         </div>
-    );
+      );
 }
-
 export default MainFrame;

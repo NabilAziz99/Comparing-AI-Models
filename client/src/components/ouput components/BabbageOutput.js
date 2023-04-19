@@ -1,10 +1,11 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 import { ThemeProvider } from "@mui/material/styles";
+import lightTheme from "../misc/ThemeModifiers";
 
 function BabbageOuput(props) {
     return (
-        <ThemeProvider theme={props.theme}>
+        <ThemeProvider theme={lightTheme}>
             <TextField
                 style={{ width: "200%" }}
                 type="text"

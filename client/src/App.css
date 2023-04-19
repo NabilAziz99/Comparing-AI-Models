@@ -1,5 +1,6 @@
-.App {
-  background-color: #282c34;
+.App {  
+  background: linear-gradient(to bottom, #0984e3, #e84393);
+
   min-height: 100vh;
   padding-left: 5em;
   padding-right: 5em;
@@ -54,7 +55,32 @@ ul {
   margin-top: 50px;
 }
 
-.UserInputFields>* {
+.ContextSimiliarityOutput {
+  margin-top: 50px;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.SimiliarityTextOutput {
+  margin-top: 50px;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.AboutSection {
+  margin-top: 50px;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.AboutSection ul{
+  list-style: none;
+}
+
+.UserInputFields > * {
   margin-right: 10px;
 }
 
@@ -80,8 +106,7 @@ ul {
 
 /*On medium screens, the .OutputFields divs will be stacked on top of each other*/
 @media (max-width: 950px) {
-  .App {
-    background-color: #282c34;
+  .App { 
     min-height: 100vh;
     padding-left: 5vmin;
     padding-right: 5vmin;
@@ -113,11 +138,11 @@ ul {
 
   ul li {
     list-style: none;
-    background-color: #282c34;
     padding: 1em;
     margin-top: 1em;
     margin-bottom: 1em;
     box-shadow: 0 0 10px 0 rgba(242, 239, 239, 0.2);
+    border: 1px solid white;
     border-radius: 10px;
   }
 
@@ -128,7 +153,6 @@ ul {
 
 .footer {
   width: 100%;
-  background-color: #282c34;
   display: flex;
   flex-direction: row;
   align-items: center;

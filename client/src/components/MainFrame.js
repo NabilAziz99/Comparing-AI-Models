@@ -10,18 +10,25 @@ import BabbageOutput from "./ouput components/BabbageOutput";
 import { useState, useEffect } from "react";
 import { lightTheme } from "./misc/ThemeModifiers";
 import axios from "axios";
+import stringSimilarity from "string-similarity";
 
-function MainFrame() {
-    const sampleText = "";
+function MainFrame(){
+
+    //Remember to remove this later... set useStates to empty strings
+    const sampleText = ""
 
     const [userInputText, setUserInputText] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [loaded, setLoaded] = useState(false);
     const [davinciOutput, setDavinciOutput] = useState(sampleText);
     const [curieOutput, setCurieOutput] = useState(sampleText);
     const [adaOutput, setAdaOutput] = useState(sampleText);
     const [babbageOutput, setBabbageOutput] = useState(sampleText);
-    const [loading, setLoading] = useState(false);
-    const [disabledSubmitButton, setDisabledSubmitButton] = useState(true);
-    const [apiKey, setApiKey] = useState(""); // State to manage the API key
+    //Used for the similarity scores
+    const [davinciSimilarity, setDavinciSimilarity] = useState(sampleText);
+    const [curieSimilarity, setCurieSimilarity] = useState(sampleText);
+    const [adaSimilarity, setAdaSimilarity] = useState(sampleText);
+    //const [babbageSimilarity, setBabbageSimilarity] = useState(sampleText);
 
     const setDisabledSubmitButtonState = (value) => setDisabledSubmitButton(value);
     const handleInputTextChange = (event) => setUserInputText(event.target.value);
@@ -71,23 +78,107 @@ function MainFrame() {
         console.log("API Key:", apiKey); // Log the value of the API key
         setLoading(true);
 
+    const callApiFunction = async (userInput, modelName, apiKey) => {
         try {
-            const davinciResult = await callApiFunction(userInputText, "davinci", apiKey);
-            const curieResult = await callApiFunction(userInputText, "curie", apiKey);
-            const adaResult = await callApiFunction(userInputText, "ada", apiKey);
-            const babbageResult = await callApiFunction(userInputText, "babbage", apiKey);
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          };
+    
+          const prompt = `You are an AI assistant, and you were asked the following question: ${userInput}. Please provide a well-researched, detailed, and helpful response.`;
+          console.log("Prompt:", prompt); // Log the prompt
+    
+          const response = await axios.post(
+            `https://api.openai.com/v1/completions`,
+            {
+              model: modelName,
+              prompt: prompt,
+              max_tokens: 150, // Increase the max_tokens value
+              temperature: 0.3,
+            },
+            { headers: headers }
+          );
+    
+          const generatedText = response.data.choices[0].text.trim();
+          console.log("API Response:", response.data); // Log the entire response
+          console.log("Generated Text:", generatedText); // Log the extracted text
+          return generatedText;
+        } catch (error) {
+          console.error("Error in callApiFunction:", error);
+        }
+      };
 
+    const callSimilarityFunction = async (firstModelName, secondModelName, firstModel, secondModel, apiKey) => {
+    try {
+        const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+        };
+
+        const prompt = `Display this in a STRICT JSON Format: {"Score":{},"FeedBack":{}} Compare these strings and give me a Score from 0 through 100 depending on how close they are related to each other in context AND for the feedback, provide why you gave it that score. This is ${firstModelName} vs ${secondModelName} : \n\n ${firstModelName}: "${firstModel}" \n\n ${secondModelName}: "${secondModel}"`;
+        console.log("Prompt:", prompt); // Log the prompt
+
+        const response = await axios.post(
+        `https://api.openai.com/v1/completions`,
+        {
+            model: "text-davinci-003",
+            prompt: prompt,
+            max_tokens: 500, // Increase the max_tokens value
+            temperature: 0.3,
+        },
+        { headers: headers }
+        );
+
+        //return a JSON object
+        const generatedText = response.data.choices[0].text.trim();
+        //if cannot parse, return an error
+        try {
+            return JSON.parse(generatedText);
+        } catch (err) {
+            console.error("Error parsing JSON:", err);
+            return { Score: "Err", FeedBack: "Err" };
+        }
+        
+    } catch (error) {
+            console.error("Error in callApiFunction:", error);
+        }
+    }
+    
+    
+    const onButtonSubmit = async () => {
+        console.log("Submitting...");
+        console.log("API Key:", apiKeyText); // Log the value of the API key
+        setLoading(true);
+
+        //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
+        try {
+            const davinciResult = await callApiFunction(userInputText, "text-davinci-002", apiKeyText);
+            const curieResult = await callApiFunction(userInputText, "text-curie-001", apiKeyText);
+            const adaResult = await callApiFunction(userInputText, "text-ada-001", apiKeyText);
+            const babbageResult = await callApiFunction(userInputText, "text-babbage-001", apiKeyText);
+        
             setDavinciOutput(davinciResult);
             setCurieOutput(curieResult);
             setAdaOutput(adaResult);
             setBabbageOutput(babbageResult);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
+            const davinciSimilarityResult = await callSimilarityFunction("Davinci", "Curie", davinciResult, curieResult, apiKeyText);
+            const curieSimilarityResult = await callSimilarityFunction("Curie", "Ada", curieResult, adaResult, apiKeyText);
+            const adaSimilarityResult = await callSimilarityFunction("Ada", "Babbage", adaResult, babbageResult, apiKeyText);
+            //const babbageSimilarityResult = await callSimilarityFunction(babbageResult, davinciResult, apiKeyText);
+
+            setDavinciSimilarity(davinciSimilarityResult);
+            setCurieSimilarity(curieSimilarityResult);
+            setAdaSimilarity(adaSimilarityResult);
+            //setBabbageSimilarity(babbageSimilarityResult);
+
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+          setLoaded(true);
+        }
+      }
 
     return (
         <div className="FieldPlaceholder">
@@ -97,14 +188,7 @@ function MainFrame() {
                 <UserInput changed={handleInputTextChange} />
             </div>
             <div className="SubmitButton">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={onButtonSubmit}
-                    disabled={loading || disabledSubmitButton} // Disable the button if loading or if the input is empty
-                >
-                    {loading ? "Loading..." : "Submit"}
-                </Button>
+                <Button variant="contained" disabled={disabledSubmitButton || loading} onClick={onButtonSubmit}> {loading ? "Loading..." : "Submit"}</Button>
             </div>
             <div className="OutputFields">
                 <AdaOutput outputText={adaOutput} />
@@ -112,6 +196,37 @@ function MainFrame() {
                 <CurieOutput outputText={curieOutput} />
                 <BabbageOutput outputText={babbageOutput} />
             </div>
+            {loaded && (
+              <div>
+                <div className="ContextSimiliarityOutput">
+                    <h1>Context Similarity Output</h1>
+                    <p><u>Prompt Sent to <i>GPT</i>: Display this in a STRICT JSON Format: "Score, FeedBack" Compare these strings and give me a Score from 0 through 100 depending on how close they are related to each other in context AND for the feedback, provide why you gave it that score.</u></p>
+                    <div className="SimilarityOuputInner">
+                      <h2>Davinci vs Curie</h2>
+                      <p><strong>Score: </strong> {davinciSimilarity.Score}</p>
+                      <p><strong>Feedback: </strong> {davinciSimilarity.FeedBack}</p>
+                      <h2>Curie vs Ada</h2>
+                      <p><strong>Score: </strong>{curieSimilarity.Score}</p>
+                      <p><strong>Feedback: </strong>{curieSimilarity.FeedBack}</p>
+                      <h2>Ada vs Babbage</h2>
+                      <p><strong>Score: </strong>{adaSimilarity.Score}</p>
+                      <p><strong>Feedback: </strong>{adaSimilarity.FeedBack}</p>
+                    </div>
+                </div>
+                <div className="SimiliarityTextOutput">
+                    <h1>Text Similarity Output</h1>
+                    <p><u>This is a score from 0 to 1 where 1 is perfect text similarity.</u></p>
+                    <div className="SimilarityOuputInner">
+                      <h2>Davinci vs Curie</h2>
+                      <p><strong>Score: </strong> { stringSimilarity.compareTwoStrings(davinciOutput, curieOutput)}</p>
+                      <h2>Curie vs Ada</h2>
+                      <p><strong>Score: </strong> { stringSimilarity.compareTwoStrings(curieOutput, adaOutput)}</p>
+                      <h2>Ada vs Babbage</h2>
+                      <p><strong>Score: </strong> { stringSimilarity.compareTwoStrings(adaOutput, babbageOutput)}</p>
+                    </div>
+                </div>
+              </div>
+            )}
         </div>
     );
 }

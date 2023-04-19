@@ -50,7 +50,7 @@ function App() {
 
       <div className='footer'>
         <p>
-          <i>Created by: Amado Lazo, CJ, Nabil, and Patrick</i>
+          <i>Created by: Amado Lazo, CJ, and Nabil</i>
         </p>
       </div>
     </div>

@@ -14,7 +14,7 @@ function ApiKeyInput(props) {
                 placeholder="Api Key" 
                 label="Api Key" 
                 onChange={props.changed} 
-                value={props.currentTextInput} 
+                value={props.currentTextInput}
             />
         </ThemeProvider>
     </div>

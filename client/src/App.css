@@ -90,7 +90,6 @@ ul {
 
 .OutputFields {
   display: flex;
-  color: white;
   flex-direction: row;
   align-items: center;
   width: 100%;

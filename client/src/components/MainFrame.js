@@ -115,7 +115,6 @@ function MainFrame() {
         console.log("API Key:", apiKey); // Log the value of the API key
         setLoading(true);
 
-        //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
         try {
             const davinciResult = await callApiFunction(userInputText, "text-davinci-002", apiKey);
             const curieResult = await callApiFunction(userInputText, "text-curie-001", apiKey);
